@@ -1,0 +1,10 @@
+Spec :
+	Supporte une alimentation et des signaux de 3.3V ou de 5V;
+	Consommation maximale de 2.5mA (lors de la collecte de données);
+	Efficace pour 0-100% d’humidité, avec une précision de 2-5%;
+	Efficace sur la plage -40 à 80°C avec une précision de 0.5°C;
+	Fréquence maximale d’échantillonnage : 0.5Hz (une fois toutes les 2s);
+	Dimensions : 27mm x 59mm x 13.5mm.
+
+Librairie : DHT sensor library
+Exemples : Fichier/Exemples/DHT Sensor Library/DHT tester
