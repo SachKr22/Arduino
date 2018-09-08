@@ -59,15 +59,15 @@ void loop()
  // Affichages :
  // Affichage DHT
  Serial.print("Humidite: ");
- Serial.print(h);
- Serial.print(" \t");
+ Serial.println(h);
  Serial.print("Temperature: ");
  Serial.print(t);
  Serial.println();
 
  // Affichage MQ135
  Serial.print("A0: ");
- Serial.print(analogRead(mq135Pin));
- Serial.print(" ppm CO2: ");
+ Serial.println(analogRead(mq135Pin));
+ Serial.print("ppm CO2: ");
  Serial.println(ppm);
+ Serial.println();
 }
