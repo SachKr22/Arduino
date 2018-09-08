@@ -35,7 +35,7 @@ void setup()
 void loop()
 {
   // Loop DHT
-  delay(5000);  // Delai d'actualisation de la mesure
+  delay(60000);  // Delai d'actualisation de la mesure
                 // La lecture du capteur MQ135 prend 250ms
                 // Les valeurs MQ135 lues peuvent etre vieilles de jusqu'a 2 secondes (le capteur lent)
   float h = dht.readHumidity();     // Lecture hygrometrie
