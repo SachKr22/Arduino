@@ -1,0 +1,1 @@
+[{"id":"e8edd28e.8c9618","type":"influxdb out","z":"cf76ea6f.91dbc8","influxdb":"6c93ea10.511824","name":"Temp_manin","measurement":"temp_manin","precision":"","retentionPolicy":"","x":910,"y":160,"wires":[]},{"id":"6c93ea10.511824","type":"influxdb","z":"","hostname":"127.0.0.1","port":"8086","protocol":"http","database":"mto_tempc","name":"TempC_DB","usetls":false,"tls":""}]
