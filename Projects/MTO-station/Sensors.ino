@@ -58,6 +58,7 @@ void loop()
 
  // Affichages :
  // Affichage DHT
+ /*
  Serial.print("Humidite: ");
  Serial.println(h);
  Serial.print("Temperature: ");
@@ -70,4 +71,13 @@ void loop()
  Serial.print("ppm CO2: ");
  Serial.println(ppm);
  Serial.println();
+*/
+ // Export en JSON
+ Serial.print("{\"humidite\":");
+ Serial.print(h);
+ Serial.print(",\"temperature\":");
+ Serial.print(t);
+ Serial.print("{\"ppm_CO2\":");
+ Serial.print(ppm);
+ Serial.println("}");
 }
