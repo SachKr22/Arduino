@@ -66,7 +66,7 @@ void loop()
 
  // Affichage MQ135
  //Serial.print("A0: ");
- Serial.println(analogRead(mq135Pin));
+ //Serial.println(analogRead(mq135Pin));
  Serial.print("ppm CO2: ");
  Serial.println(ppm);
  Serial.println();
