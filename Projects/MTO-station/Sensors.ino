@@ -73,11 +73,11 @@ void loop()
  Serial.println();
 */
  // Export en JSON
- Serial.print("{\"humidite\":");
+Serial.print("{\"hum_raw\":");
  Serial.print(h);
- Serial.print(",\"temperature\":");
+ Serial.print(",\"temp_raw\":");
  Serial.print(t);
- Serial.print("{\"ppm_CO2\":");
+ Serial.print(",\"co2_raw\":");
  Serial.print(ppm);
  Serial.println("}");
 }
