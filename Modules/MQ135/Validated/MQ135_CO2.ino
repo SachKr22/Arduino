@@ -26,5 +26,5 @@ void loop()
     Serial.print(analogRead(mq135Pin));
     Serial.print(" ppm CO2: ");
     Serial.println(ppm);
-    delay(5000);        // Actualise la mesure chaque seconde
+    delay(5000);        // Delai d'actualisation de la mesure
 }
