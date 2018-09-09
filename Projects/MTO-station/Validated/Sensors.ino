@@ -1,15 +1,18 @@
 // Consolidtation des codes
+//HC-12 messenger MTO send/receive
 
 // Librairies
-#include "DHT.h"    // DHT22
-#include "MQ135.h"  // MQ135
+#include "DHT.h"              // DHT22 - Temp/Humidite
+#include "MQ135.h"            // MQ135 - Air Quality
+#include <SoftwareSerial.h>   // HC-12 - 433mhz
 
 // Variables
 
 
 // Definition des pins
-#define DHTPIN 8          // broche ou l'on a branche le capteur
-const int mq135Pin = 0;   // Pin sur lequel est branché de MQ135
+#define DHTPIN 8                // broche ou l'on a branche le capteur
+const int mq135Pin = 0;         // Pin sur lequel est branché de MQ135
+SoftwareSerial mySerial(2, 3);  // RX, TX
 
 // Section DHT22
 // de-commenter le capteur utilise
@@ -23,19 +26,19 @@ DHT dht(DHTPIN, DHTTYPE);   //déclaration du capteur
 // Section MQ135
 MQ135 gasSensor = MQ135(mq135Pin);  // Initialise l'objet MQ135 sur le Pin spécifié
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
+  mySerial.begin(9600);
   float rzero = gasSensor.getRZero();
   Serial.print("R0: ");
   Serial.println(rzero);  // Valeur à reporter ligne 27 du fichier mq135.h après 48h de préchauffage
   dht.begin();
 }
 
-void loop()
-{
+void loop() {
+
   // Loop DHT
-  delay(60000);  // Delai d'actualisation de la mesure
+  delay(900000);  // Delai d'actualisation de la mesure : 15 minutes
                 // La lecture du capteur MQ135 prend 250ms
                 // Les valeurs MQ135 lues peuvent etre vieilles de jusqu'a 2 secondes (le capteur lent)
   float h = dht.readHumidity();     // Lecture hygrometrie
@@ -56,28 +59,29 @@ void loop()
   float ppm = gasSensor.getPPM();
   // Fin Loop MQ135
 
- // Affichages :
- // Affichage DHT
- /*
- Serial.print("Humidite: ");
- Serial.println(h);
- Serial.print("Temperature: ");
- Serial.print(t);
- Serial.println();
+  // Affichages :
+  // Affichage DHT
+  /*
+  Serial.print("Humidite: ");
+  Serial.println(h);
+  Serial.print("Temperature: ");
+  Serial.print(t);
+  Serial.println();
 
- // Affichage MQ135
- //Serial.print("A0: ");
- //Serial.println(analogRead(mq135Pin));
- Serial.print("ppm CO2: ");
- Serial.println(ppm);
- Serial.println();
-*/
- // Export en JSON
-Serial.print("{\"hum_raw\":");
- Serial.print(h);
- Serial.print(",\"temp_raw\":");
- Serial.print(t);
- Serial.print(",\"co2_raw\":");
- Serial.print(ppm);
- Serial.println("}");
+  // Affichage MQ135
+  //Serial.print("A0: ");
+  //Serial.println(analogRead(mq135Pin));
+  Serial.print("ppm CO2: ");
+  Serial.println(ppm);
+  Serial.println();
+  */
+  // Export en JSON
+  mySerial.print("{\"hum_raw\":");
+  mySerial.print(h);
+  mySerial.print(",\"temp_raw\":");
+  mySerial.print(t);
+  mySerial.print(",\"co2_raw\":");
+  mySerial.print(ppm);
+  mySerial.print("}");
+
 }

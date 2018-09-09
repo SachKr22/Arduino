@@ -38,7 +38,7 @@ void setup() {
 void loop() {
 
   // Loop DHT
-  delay(5000);  // Delai d'actualisation de la mesure
+  delay(900000);  // Delai d'actualisation de la mesure : 15 minutes
                 // La lecture du capteur MQ135 prend 250ms
                 // Les valeurs MQ135 lues peuvent etre vieilles de jusqu'a 2 secondes (le capteur lent)
   float h = dht.readHumidity();     // Lecture hygrometrie
@@ -82,20 +82,6 @@ void loop() {
   mySerial.print(t);
   mySerial.print(",\"co2_raw\":");
   mySerial.print(ppm);
-  mySerial.println("}");
-
-  // Loop HC-12
-  if(Serial.available() > 0){//Read from serial monitor and send over HC-12
-    String input = Serial.readString();
-    mySerial.println(input);
-  }
-
-  if(mySerial.available() > 1){//Read from HC-12 and send to serial monitor
-    String input = mySerial.readString();
-    Serial.println(input);
-  }
-  delay(20);
-  // Fin Loop HC-12
-
+  mySerial.print("}");
 
 }
