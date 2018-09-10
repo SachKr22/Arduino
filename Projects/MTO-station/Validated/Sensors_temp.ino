@@ -10,8 +10,13 @@
 #include <PubSubClient.h>     // MQTT
 //#include <SoftwareSerial.h>   // HC-12 - 433mhz si nécessaire
 
-// Definition des pins
+// Definition des pins & Variables
 int led_Red = 5;
+#define DHTPIN 8                // broche ou l'on a branche le capteur
+const int mq135Pin = 0;         // Pin sur lequel est branché de MQ135
+#define DHTTYPE DHT22 // DHT 22 (AM2302)
+DHT dht(DHTPIN, DHTTYPE);   //déclaration du capteur
+MQ135 gasSensor = MQ135(mq135Pin);  // Initialise l'objet MQ135 sur le Pin spécifié
 
 // Mettre à jour les 3 lignes suivantes selon votre configuration réseau:
 byte mac[] = { 0xFB, 0xA2, 0xDA, 0x0E, 0xD1, 0xFB }; // mac adress shield Ethernet
@@ -86,22 +91,21 @@ void reconnect() {
 
 void setup() {
   Serial.begin(115200);
-  //float rzero = gasSensor.getRZero();
-  //Serial.print("R0: ");
-  //Serial.println(rzero);  // Valeur à reporter ligne 27 du fichier mq135.h après 48h de préchauffage
-  //dht.begin();
+  float rzero = gasSensor.getRZero();
+  Serial.print("R0: ");
+  Serial.println(rzero);  // Valeur à reporter ligne 27 du fichier mq135.h après 48h de préchauffage
+  dht.begin();
 
-  // Configuration des pins Arduino en sortie:
+// Configuration des pins Arduino en sortie:
   pinMode(led_Red, OUTPUT);
 
-
-
+// Configuration client / server
   client.setServer(server, 1883);
   client.setCallback(callback);
   Ethernet.begin(mac, ip);
   // Allow the hardware to sort itself out
   delay(1500);
-}
+} // Fin Setup
 
 void loop()
 {
@@ -109,8 +113,7 @@ void loop()
     reconnect();
   }
   client.loop();
-}
-  /*
+
   long now = millis();
   if (now - lastMsg > 5000) // toute les 5 secondes on envoi les mesures au Broker
   {
@@ -118,26 +121,26 @@ void loop()
     lastMsg = now;
     ++value;
     // On envoi les mesures au Broker:
-    float temp_U = bme.readTemperature();
-    dtostrf(temp_U, 3, 2, t);  // Conversion float en char.
+    float temp_U = dht.readTemperature();  // Lecture Temperature en celsius (par defaut)
+    dtostrf(temp_U, 3, 1, t);  // Conversion float en char.
     client.publish("stationUno/temperature", t);
 
-    float hum_U = bme.readHumidity();
-    dtostrf(hum_U, 3, 2, t);
+    float hum_U = dht.readHumidity();     // Lecture hygrometrie
+    dtostrf(hum_U, 3, 1, t);
     client.publish("stationUno/humidite", t);
 
-    float press_U = bme.readPressure();
-    dtostrf(press_U, 0, 0, t);
-    client.publish("stationUno/pression", t);
+    float ppm_U = gasSensor.getPPM();
+    dtostrf(ppm_U, 3, 1, t);
+    client.publish("stationUno/ppm", t);
 
-    float altit_U = bme.readAltitude(1013.25);
+    /*float altit_U = bme.readAltitude(1013.25);
     dtostrf(altit_U, 3, 2, t);
     client.publish("stationUno/altitude", t);
-
-    Serial.println("Publish message du BME280");
+    */
+    Serial.println("Publish message du DHT22 & MQ135");
 
   }
-  */
+} // Fin Loop
 
   // Affichages :
   // Affichage DHT
