@@ -11,7 +11,7 @@
 //#include <SoftwareSerial.h>   // HC-12 - 433mhz si nécessaire
 
 // Definition des pins & Variables
-int led_Red = 5;
+//int led_Red = 5;
 #define DHTPIN 8                // broche ou l'on a branche le capteur
 const int mq135Pin = 0;         // Pin sur lequel est branché de MQ135
 #define DHTTYPE DHT22 // DHT 22 (AM2302)
@@ -47,15 +47,14 @@ void callback(char* topic, byte* payload, unsigned int length)
   String msgString = String(message_buff);
   Serial.println("Payload: " + msgString);
 
-  if (topic2 == "stationUno/switchRouge") // LED rouge
+  /*if (topic2 == "stationUno/switchRouge") // LED rouge
   {
     if (msgString == "ON") {
       digitalWrite(led_Red, HIGH);
     }
     else {
       digitalWrite(led_Red, LOW);
-    }
-  }
+    }*/
 }
 // Fin fonction appelée lors de la réception d'un topic + traitement du payload
 
@@ -97,7 +96,7 @@ void setup() {
   dht.begin();
 
 // Configuration des pins Arduino en sortie:
-  pinMode(led_Red, OUTPUT);
+//  pinMode(led_Red, OUTPUT);
 
 // Configuration client / server
   client.setServer(server, 1883);
@@ -115,7 +114,7 @@ void loop()
   client.loop();
 
   long now = millis();
-  if (now - lastMsg > 5000) // toute les 5 secondes on envoi les mesures au Broker
+  if (now - lastMsg > 60000) // toute les 5 secondes on envoi les mesures au Broker
   {
     char t[10];
     lastMsg = now;
