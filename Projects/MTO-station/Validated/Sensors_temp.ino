@@ -1,5 +1,5 @@
 // Consolidtation des codes
-//HC-12 messenger MTO send/receive
+//Collecte des données via DHT22 & MQ135 -> MQTT -> Rasp -> InfluxDB -> Grafana
 
 // Librairies
 #include "DHT.h"              // DHT22 - Temp/Humidite
@@ -8,17 +8,16 @@
 #include <SPI.h>              // ???
 #include <Ethernet.h>         // Shield Ethernet
 #include <PubSubClient.h>     // MQTT
-//#include <SoftwareSerial.h>   // HC-12 - 433mhz si nécessaire
+#define IR_output 2
 
 // Definition des pins & Variables
-//int led_Red = 5;
 #define DHTPIN 8                // broche ou l'on a branche le capteur
 const int mq135Pin = 0;         // Pin sur lequel est branché de MQ135
 #define DHTTYPE DHT22 // DHT 22 (AM2302)
 DHT dht(DHTPIN, DHTTYPE);   //déclaration du capteur
 MQ135 gasSensor = MQ135(mq135Pin);  // Initialise l'objet MQ135 sur le Pin spécifié
 
-// Mettre à jour les 3 lignes suivantes selon votre configuration réseau:
+// Mettre à jour les 3 lignes suivantes selon la configuration réseau:
 byte mac[] = { 0xFB, 0xA2, 0xDA, 0x0E, 0xD1, 0xFB }; // mac adress shield Ethernet
 IPAddress ip(192, 168, 1, 70);     // (192.168.1.70) adresse IP carte UNO
 IPAddress server(192, 168, 1, 11);   //(192.168.1.11);  // Broker
@@ -46,17 +45,7 @@ void callback(char* topic, byte* payload, unsigned int length)
   message_buff[i] = '\0';
   String msgString = String(message_buff);
   Serial.println("Payload: " + msgString);
-
-  /*if (topic2 == "stationUno/switchRouge") // LED rouge
-  {
-    if (msgString == "ON") {
-      digitalWrite(led_Red, HIGH);
-    }
-    else {
-      digitalWrite(led_Red, LOW);
-    }*/
-}
-// Fin fonction appelée lors de la réception d'un topic + traitement du payload
+}// Fin fonction appelée lors de la réception d'un topic + traitement du payload
 
 // Fonction connexion
 EthernetClient ethClient;
@@ -85,18 +74,15 @@ void reconnect() {
       delay(5000);
     }
   }
-}
-// Fin fonction connexion
+} // Fin fonction connexion
 
 void setup() {
   Serial.begin(115200);
+  pinMode(IR_output,INPUT);   // Capteur PIR
   float rzero = gasSensor.getRZero();
   Serial.print("R0: ");
   Serial.println(rzero);  // Valeur à reporter ligne 27 du fichier mq135.h après 48h de préchauffage
   dht.begin();
-
-// Configuration des pins Arduino en sortie:
-//  pinMode(led_Red, OUTPUT);
 
 // Configuration client / server
   client.setServer(server, 1883);
@@ -112,9 +98,23 @@ void loop()
     reconnect();
   }
   client.loop();
-
   long now = millis();
-  if (now - lastMsg > 60000) // toute les 5 secondes on envoi les mesures au Broker
+
+  // Boucle capteur PIR
+  if(digitalRead(IR_output)==HIGH){
+   //Serial.println("mouvement detecte");
+   client.publish("alarme/intrusion", "ALARME INTRUSION DETECTEE !");
+   Serial.println("ALARME INTRUSION DETECTEE !");
+   }
+  if(digitalRead(IR_output)==LOW){
+   Serial.println("pas de mouvement detecte");
+
+   Serial.println("Publish message Capteur PIR");
+  }
+  delay(2000);
+  // Fin boucle capteur PIR
+
+  if (now - lastMsg > 5000) // toute les 5 secondes on envoi les mesures au Broker
   {
     char t[10];
     lastMsg = now;
@@ -128,41 +128,11 @@ void loop()
     dtostrf(hum_U, 3, 1, t);
     client.publish("stationUno/humidite", t);
 
-    float ppm_U = gasSensor.getPPM();
+    float ppm_U = gasSensor.getPPM();     // Lecture CO2 en ppm
     dtostrf(ppm_U, 3, 1, t);
     client.publish("stationUno/ppm", t);
 
-    /*float altit_U = bme.readAltitude(1013.25);
-    dtostrf(altit_U, 3, 2, t);
-    client.publish("stationUno/altitude", t);
-    */
     Serial.println("Publish message du DHT22 & MQ135");
 
   }
-} // Fin Loop
-
-  // Affichages :
-  // Affichage DHT
-  /*
-  Serial.print("Humidite: ");
-  Serial.println(h);
-  Serial.print("Temperature: ");
-  Serial.print(t);
-  Serial.println();
-
-  // Affichage MQ135
-  //Serial.print("A0: ");
-  //Serial.println(analogRead(mq135Pin));
-  Serial.print("ppm CO2: ");
-  Serial.println(ppm);
-  Serial.println();
-  */
-  /* Export en JSON
-  mySerial.print("{\"hum_raw\":");
-  mySerial.print(h);
-  mySerial.print(",\"temp_raw\":");
-  mySerial.print(t);
-  mySerial.print(",\"co2_raw\":");
-  mySerial.print(ppm);
-  mySerial.print("}");
-  */
+}
