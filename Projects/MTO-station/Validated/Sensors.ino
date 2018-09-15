@@ -8,6 +8,7 @@
 #include <SPI.h>              // ???
 #include <Ethernet.h>         // Shield Ethernet
 #include <PubSubClient.h>     // MQTT
+#define IR_output 2           // Capteur PIR
 
 // Definition des pins & Variables
 #define DHTPIN 8                // broche ou l'on a branche le capteur
@@ -77,6 +78,7 @@ void reconnect() {
 
 void setup() {
   Serial.begin(115200);
+  pinMode(IR_output,INPUT);   // Capteur PIR
   float rzero = gasSensor.getRZero();
   Serial.print("R0: ");
   Serial.println(rzero);  // Valeur à reporter ligne 27 du fichier mq135.h après 48h de préchauffage
@@ -96,9 +98,23 @@ void loop()
     reconnect();
   }
   client.loop();
-
   long now = millis();
-  if (now - lastMsg > 60000) // toute les 5 secondes on envoi les mesures au Broker
+
+  // Boucle capteur PIR
+  if(digitalRead(IR_output)==HIGH){
+   //Serial.println("mouvement detecte");
+   client.publish("alarme/intrusion", "ALARME INTRUSION DETECTEE !");
+   Serial.println("ALARME INTRUSION DETECTEE !");
+   }
+  if(digitalRead(IR_output)==LOW){
+   Serial.println("pas de mouvement detecte");
+
+   Serial.println("Publish message Capteur PIR");
+  }
+  delay(2000);
+  // Fin boucle capteur PIR
+
+  if (now - lastMsg > 5000) // toute les 5 secondes on envoi les mesures au Broker
   {
     char t[10];
     lastMsg = now;

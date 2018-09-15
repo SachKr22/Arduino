@@ -8,7 +8,7 @@
 #include <SPI.h>              // ???
 #include <Ethernet.h>         // Shield Ethernet
 #include <PubSubClient.h>     // MQTT
-#define IR_output 2
+#define IR_output 2           // Capteur PIR
 
 // Definition des pins & Variables
 #define DHTPIN 8                // broche ou l'on a branche le capteur
