@@ -58,12 +58,12 @@ void reconnect() {
     // On attend la connection, mqtt_user et mqtt_password si configuré sur le Broker !
     // (client.connect("arduinoClient", mqtt_user, mqtt_password))
     if (client.connect("arduinoClient")) {
-      Serial.println("connected");
+      Serial.println("connected :)");
       // une fois connectée, on souscrit au différent topic:
-      client.subscribe("stationUno/switchBleu");
-      client.subscribe("stationUno/switchVert");
-      client.subscribe("stationUno/switchRouge");
-      client.subscribe("stationUno/switchJaune");
+      //client.subscribe("stationUno/switchBleu");
+      //client.subscribe("stationUno/switchVert");
+      //client.subscribe("stationUno/switchRouge");
+      //client.subscribe("stationUno/switchJaune");
 
     }
     else {
@@ -103,15 +103,11 @@ void loop()
   // Boucle capteur PIR
   if(digitalRead(IR_output)==HIGH){
    //Serial.println("mouvement detecte");
-   client.publish("alarme/intrusion", "ALARME INTRUSION DETECTEE !");
-   Serial.println("ALARME INTRUSION DETECTEE !");
-   }
-  if(digitalRead(IR_output)==LOW){
-   Serial.println("pas de mouvement detecte");
-
+   client.publish("alarme/intrusion", "PYRO-ALARM");
+   Serial.println("PYRO-ALARM");
    Serial.println("Publish message Capteur PIR");
-  }
-  delay(2000);
+   delay(2000);
+   }
   // Fin boucle capteur PIR
 
   if (now - lastMsg > 5000) // toute les 5 secondes on envoi les mesures au Broker
