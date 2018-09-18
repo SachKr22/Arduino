@@ -7,9 +7,9 @@ void setup()
 }
 
 void loop()
-{   
+{
    DHT.read11(dht_dpin);
-   
+
    float h = DHT.humidity;
    float t = DHT.temperature;
    Serial.print("Temperature : ");
