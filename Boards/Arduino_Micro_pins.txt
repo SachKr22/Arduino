@@ -1,0 +1,10 @@
+Arduino   SDA   SCL
+Uno       A4    A5
+Nano      A4    A5
+Mini      A4    A5
+101       SDA   SCL
+Zero      SDA   SCL
+Leonardo  2     3
+Micro     2     3
+Due       20    21
+Mega      20    21
