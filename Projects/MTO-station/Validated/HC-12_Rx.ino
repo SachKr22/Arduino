@@ -13,8 +13,8 @@ void setup() {
 }
 
 void loop() {
-  while (HC12.available()) {        // If HC-12 has data
-    Serial.write(HC12.read());      // Send the data to Serial monitor
+  while (HC12.available()) {        // Si je recois sur via HC-12
+    Serial.write(HC12.read());      // Envoi vers Serial monitor
   }
 
 }
