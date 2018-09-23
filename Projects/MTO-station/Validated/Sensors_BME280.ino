@@ -1,5 +1,4 @@
 // Consolidtation des codes
-//Collecte des données via DHT22 & MQ135 -> MQTT -> Rasp -> InfluxDB -> Grafana
 
 // Librairies
 #include "MQ135.h"            // MQ135 - Air Quality
