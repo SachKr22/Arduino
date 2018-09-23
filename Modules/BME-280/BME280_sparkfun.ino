@@ -112,12 +112,12 @@ mySensor.settings.humidOverSample =4  sur-échantillonnage x 8.
 mySensor.settings.humidOverSample =1  sur-échantillonnage x 16.
 */
 
-#include "SparkFunBME280.h"
+include "SparkFunBME280.h"
 //Library allows either I2C or SPI, so include both.
 #include "Wire.h"
 #include "SPI.h"
 
-BME280 mySensor;
+BME280 bme280;
 
 void setup() {
 
@@ -126,30 +126,30 @@ void setup() {
     // Attente de l'ouverture du port série pour Arduino LEONARDO
   }
   //configuration du capteur
-  mySensor.settings.commInterface = I2C_MODE;
-  mySensor.settings.I2CAddress = 0x76;
-  mySensor.settings.runMode = 3;
-  mySensor.settings.tStandby = 3;
-  mySensor.settings.filter = 3;
-  mySensor.settings.tempOverSample = 5;
-  mySensor.settings.pressOverSample = 5;
-  mySensor.settings.humidOverSample = 5;
+  bme280.settings.commInterface = I2C_MODE;
+  bme280.settings.I2CAddress = 0x76;
+  bme280.settings.runMode = 3;
+  bme280.settings.tStandby = 3;
+  bme280.settings.filter = 3;
+  bme280.settings.tempOverSample = 5;
+  bme280.settings.pressOverSample = 5;
+  bme280.settings.humidOverSample = 5;
 
   Serial.println("Starting BME280... ");
   delay(10);  // attente de la mise en route du capteur. 2 ms minimum
   // chargement de la configuration du capteur
-  mySensor.begin();
+  bme280.begin();
 }
 
 void loop() {
   Serial.print("Température: ");
-  Serial.print(mySensor.readTempC(), 1);
+  Serial.print(bme280.readTempC(), 1);
   Serial.print(" °C");
   Serial.print("\t Pression: ");
-  Serial.print(mySensor.readFloatPressure() / 100.0F, 1);
+  Serial.print(bme280.readFloatPressure() / 100.0F, 1);
   Serial.print(" HPa");
   Serial.print("\t humidité relative : ");
-  Serial.print(mySensor.readFloatHumidity(), 1);
+  Serial.print(bme280.readFloatHumidity(), 1);
   Serial.println(" %");
   delay(1000);
 }
