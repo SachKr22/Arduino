@@ -14,7 +14,8 @@
 const int mq135Pin = 0;         // Pin sur lequel est branché de MQ135
 MQ135 gasSensor = MQ135(mq135Pin);  // Initialise l'objet MQ135 sur le Pin spécifié
 BME280 mySensor;    // Declaration capteur BME280
-// Mettre à jour les 3 lignes suivantes selon la configuration réseau:
+
+// CONFIGURATION MQTT - Mettre à jour les 3 lignes suivantes selon la configuration réseau:
 byte mac[] = { 0xFB, 0xA2, 0xDA, 0x0E, 0xD1, 0xFB }; // mac adress shield Ethernet
 IPAddress ip(192, 168, 1, 70);     // (192.168.1.70) adresse IP carte UNO
 IPAddress server(192, 168, 1, 11);   //(192.168.1.11);  // Broker
