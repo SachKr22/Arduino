@@ -1,6 +1,5 @@
 /*    Arduino Long Range Wireless Communication using HC-12
-                      Example 01
-   by Dejan Nedelkovski, www.HowToMechatronics.com
+      HC-12 Messenger Tx/Rx
 */
 
 #include <SoftwareSerial.h>

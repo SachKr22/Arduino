@@ -1,4 +1,4 @@
-/*    Arduino Long Range Wireless Communication using HC-12
+/*    Arduino Capteur BME280 -> HC-12
       Tx = Arduino Micro - Rx = Arduino Uno
 */
 
