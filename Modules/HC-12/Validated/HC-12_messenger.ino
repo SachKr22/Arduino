@@ -7,7 +7,7 @@
 SoftwareSerial HC12(10, 11); // HC-12 TX Pin 10, HC-12 RX Pin 11
 
 void setup() {
-  Serial.begin(9600);             // Serial port to computer
+  Serial.begin(115200);             // Serial port to computer
   HC12.begin(9600);               // Serial port to HC12
 
 }
