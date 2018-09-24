@@ -1,1 +1,3 @@
 https://howtomechatronics.com/tutorials/arduino/arduino-and-hc-12-long-range-wireless-communication-module/
+
+http://dev.drun.net/2017/03/19/reading-temperature-with-arduino-and-sending-it-via-hc-12/
