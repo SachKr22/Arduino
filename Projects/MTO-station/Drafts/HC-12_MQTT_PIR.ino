@@ -109,8 +109,8 @@ void loop() {
     ++value;
     // On envoi les mesures au Broker:
 
-    float temp_U = HC12.read());  // Lecture Temperature en celsius
-    dtostrf(temp_U, 3, 1, t);  // Conversion float en char.
+//    float temp_U = HC12.read());  // Lecture Temperature en celsius
+    dtostrf(HC12.read(), 3, 1, t);  // Conversion float en char.
     client.publish("stationUno/temperature", t);
 /*
     float hum_U = mySensor.readFloatHumidity();     // Lecture hygrometrie
